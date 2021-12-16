@@ -1,0 +1,16 @@
+{
+  "name": "sixlabs/dev-cli",
+  "description": "",
+  "license": "MIT",
+  "homepage": "",
+  "keywords": [],
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "require": {
+    "minicli/minicli": "^2.0",
+    "titasgailius/terminal": "^1.1"
+  }
+}

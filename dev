@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+<?php
+
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Services\Art;
+use Minicli\App;
+use Minicli\Exception\CommandNotFoundException;
+use App\Services\TerminalOutput;
+
+$app = new App([
+    'theme' => '\Unicorn',
+    'app_path' => __DIR__ . '/app/Command',
+    'debug' => true
+]);
+
+$app->addService(TerminalOutput::class, new TerminalOutput);
+$app->addService(Art::class, new Art);
+
+try {
+    $app->{Art::class}->header();
+    $app->runCommand($argv);
+} catch (CommandNotFoundException $notFoundException) {
+    $app->getPrinter()->error("Command Not Found.");
+    return 1;
+} catch (Exception $exception) {
+    if ($app->config->debug) {
+        $app->getPrinter()->error("An error occurred:");
+        $app->getPrinter()->error($exception->getMessage());
+    }
+    return 1;
+}
+
+return 0;
