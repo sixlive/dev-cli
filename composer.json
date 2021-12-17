@@ -11,7 +11,8 @@
   },
   "require": {
     "minicli/minicli": "^2.0",
-    "titasgailius/terminal": "^1.1"
+    "titasgailius/terminal": "^1.1",
+    "illuminate/collections": "^8.76"
   },
   "require-dev": {
     "larapack/dd": "^1.1"
