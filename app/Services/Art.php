@@ -16,7 +16,7 @@ class Art implements ServiceInterface {
         ██   ██ █████   ██    ██     ██      ██      ██
         ██   ██ ██       ██  ██      ██      ██      ██
         ██████  ███████   ████        ██████ ███████ ██
-                                    - with love sixlabs
+                                   - with love, sixlabs
         EOF, false);
     }
 
