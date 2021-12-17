@@ -14,8 +14,7 @@ class DefaultController extends CommandController
         $terminalResponse = $this->app->{TerminalOutput::class};
         $localConfig = $this->app->{LocalConfig::class};
         $localConfig();
-
-        dd($this->app->getSignature());
+        dd($this->getArgs());
 
         // Valet
         $this->getPrinter()->info('Starting valet...');

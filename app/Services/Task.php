@@ -17,7 +17,7 @@ class Task implements ServiceInterface {
     public function __invoke(string $title, callable $task)
     {
         $output = $this->app->getPrinter();
-        $output->rawOutput("$title...");
+        $output->out("$title...", 'info');
 
         sleep(1);
 
@@ -27,15 +27,19 @@ class Task implements ServiceInterface {
             $success = false;
         }
 
-        if ($success) {
-            // Go to start of line
-            $output->rawOutput("\x0D");
+        // Go to start of line
+        $output->rawOutput("\x0D");
+        // Erase the line
+        $output->rawOutput("\x1B[2K");
 
-            // Erase the line
-            $output->rawOutput("\x1B[2K");
-            $output->success("✔ $title");
+        if ($success) {
+            $output->out("✔ $title", 'success');
         } else {
-            $output->error("$title failed!");
+            $output->out("ⅹ $title", 'error');
         }
+
+        $output->newline();
+
+        return $success;
     }
 };
