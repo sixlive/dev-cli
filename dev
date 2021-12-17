@@ -75,7 +75,7 @@ try {
 
            foreach (array_keys($command['actions']) as $sub) {
                 $output->newline();
-                $output->out(sprintf('%s%s','└──', $sub));
+                $output->out(sprintf('%s %s','└──', $sub));
            }
 
             $output->newline();
