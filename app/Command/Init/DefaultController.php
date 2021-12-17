@@ -10,8 +10,10 @@ class DefaultController extends CommandController
     public function handle()
     {
         $task = $this->app->{Task::class};
-        $this->getPrinter()->info('Initializing');
-        $this->getPrinter()->newline();
+        $output = $this->getPrinter();
+
+        $output->info(' Initializing ', true);
+        $output->newLine();
 
         $task('Create config file', fn () => $this->createConfigFile());
     }
@@ -21,7 +23,6 @@ class DefaultController extends CommandController
         $configPath = sprintf('%s/.config/dev-cli', getenv("HOME"));
 
         if (!is_dir($configPath)) {
-            $this->getPrinter()->info('Creating config file...');
             mkdir($configPath, 0777, true);
             copy(__DIR__.'/stubs/config.php', $configPath.'/config.php');
         }

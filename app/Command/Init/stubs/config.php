@@ -1,15 +1,14 @@
 <?php
 
-env('default', function () {
+$this->env('default', function () {
     $this->action('start', function () {
-        task('Valet', 'valet start');
-        task('DBngin', 'open /Applications/DBngin.app');
-        //task('Docker', 'docker-compose...');
+        $this->task('Valet', 'valet start');
+        $this->task('DBngin', 'open /Applications/DBngin.app');
     });
 
+
     $this->action('stop', function () {
-        task('Valet', 'valet start');
-        task('DBngin', 'open /Applications/DBngin.app');
-        //task('Docker', 'docker-compose..');
+        $this->task('Valet', 'valet stop');
+        $this->task('DBngin', 'open /Applications/DBngin.app');
     });
 });
