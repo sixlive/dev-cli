@@ -2,6 +2,8 @@
 class ENV
 {
     protected array $actions = [];
+    protected array $tasks = [];
+
     public function __construct(public string $title)
     {
         //
@@ -14,14 +16,11 @@ class ENV
 
     public function action(string $title, Closure $tasks)
     {
-        $this->actions[$title] = new Action;
-        $tasks->bindTo($this->actions[$title])();
+        $this->actions[$title] = [];
+        $tasks->bindTo($this)();
+        array_merge($this->actions[$title], $this->tasks);
+        $this->tasks = [];
     }
-}
-
-class Action
-{
-    public array $tasks = [];
 
     public function task(string $title, string $command)
     {
