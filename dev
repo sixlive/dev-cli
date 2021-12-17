@@ -8,6 +8,8 @@ if (php_sapi_name() !== 'cli') {
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Services\Art;
+use App\Services\LocalConfig;
+use App\Services\Task;
 use Minicli\App;
 use Minicli\Exception\CommandNotFoundException;
 use App\Services\TerminalOutput;
@@ -20,6 +22,8 @@ $app = new App([
 
 $app->addService(TerminalOutput::class, new TerminalOutput);
 $app->addService(Art::class, new Art);
+$app->addService(Task::class, new Task);
+$app->addService(LocalConfig::class, new LocalConfig);
 
 try {
     $app->{Art::class}->header();
