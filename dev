@@ -8,9 +8,13 @@ if (php_sapi_name() !== 'cli') {
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Services\Art;
+use App\Services\LocalConfig;
+use App\Services\Task;
 use Minicli\App;
 use Minicli\Exception\CommandNotFoundException;
 use App\Services\TerminalOutput;
+use Minicli\Command\CommandCall;
+use TitasGailius\Terminal\Terminal;
 
 $app = new App([
     'theme' => '\Unicorn',
@@ -20,17 +24,75 @@ $app = new App([
 
 $app->addService(TerminalOutput::class, new TerminalOutput);
 $app->addService(Art::class, new Art);
+$app->addService(Task::class, new Task);
+$app->addService(LocalConfig::class, new LocalConfig);
+
+$localConfig = ($app->{LocalConfig::class})();
+
+collect($localConfig)
+    ->each(function ($command, $key) use ($app) {
+        $app->registerCommand(
+            $key,
+            function (CommandCall $call) use ($command, $app) {
+                $actions = $command['actions'];
+                $output = $app->getPrinter();
+
+                if ($call->subcommand === 'help') {
+                   $output->out($call->command, 'info_alt');
+                   foreach (array_keys($actions) as $sub) {
+                        $output->newline();
+                        $output->out(sprintf('%s%s','└──', $sub));
+                   }
+
+                    $output->newline();
+                   return 0;
+                }
+
+                if (!array_key_exists($call->subcommand, $actions)) {
+                    throw new CommandNotFoundException();
+                }
+
+                $task = $app->{Task::class};
+                $output->info(' Running Tasks ', true);
+                $output->newLine();
+                foreach ($actions[$call->subcommand] as $sub => $ex) {
+                    $success = $task($sub, fn () => (Terminal::run($ex))->ok());
+                    if (!$success) {
+                        throw new Exception("$sub failed");
+                    }
+                }
+            }
+        );
+    });
 
 try {
     $app->{Art::class}->header();
+    $output = $app->getPrinter();
+
+    // Map to default command
+    $isDefinedcommand = array_key_exists(
+        $argv[1] ?? null,
+        $app->command_registry->getCommandMap()
+    );
+
+    $isConfigCommand = array_key_exists($argv[1] ?? null, $localConfig);
+
+    if (!$isDefinedcommand && !$isConfigCommand) {
+        array_splice($argv, 1, 0, 'default');
+    }
+
     $app->runCommand($argv);
+
 } catch (CommandNotFoundException $notFoundException) {
     $app->getPrinter()->error("Command Not Found.");
     return 1;
 } catch (Exception $exception) {
     if ($app->config->debug) {
-        $app->getPrinter()->error("An error occurred:");
-        $app->getPrinter()->error($exception->getMessage());
+        $app->getPrinter()->newline();
+        $app->getPrinter()->out("An error occurred:", 'error');
+        $app->getPrinter()->newline();
+        $app->getPrinter()->out($exception->getMessage(), 'error');
+        $app->getPrinter()->newline();
     }
     return 1;
 }
