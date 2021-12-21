@@ -37,7 +37,11 @@ class LoadLocalConfig
 
         foreach ($config->toArray() as $command => $actions){
             foreach ($actions as $action => $tasks) {
-                $commands["{$command}:{$action}"] = collect($tasks);
+                $name = strtolower($command) === 'default'
+                    ? $action
+                    : "{$command}:{$action}";
+
+                $commands["$name"] = collect($tasks);
             }
         }
 
