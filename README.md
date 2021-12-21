@@ -9,9 +9,12 @@
 A configurable development environment CLI.
 
 ## Installation
+Head on over to [releases](https://github.com/sixlive/dev-cli/releases) page and snage a built copy of `dev-cli`. You'll need to make it executable `chmod +x dev-cli` as well.
+
+On your first run you'll want to create the configuration directory with the default config.
 
 ```bash
-dev-cli install
+./dev-cli install
 ```
 
 ## Usage
