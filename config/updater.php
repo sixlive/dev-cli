@@ -1,6 +1,6 @@
 <?php
 
-use LaravelZero\Framework\Components\Updater\Strategy\GitHubReleasesStrategy;
+use LaravelZero\Framework\Components\Updater\Strategy\GithubReleasesStrategy;
 
 return [
 
@@ -15,6 +15,6 @@ return [
     |
     */
 
-    'strategy' => GitHubReleasesStrategy::class,
+    'strategy' => GithubReleasesStrategy::class,
 
 ];

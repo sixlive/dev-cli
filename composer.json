@@ -6,13 +6,13 @@
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel-zero/laravel-zero/issues",
-        "source": "https://github.com/laravel-zero/laravel-zero"
+        "issues": "https://github.com/sixlive/dev-cli/issues",
+        "source": "https://github.com/sixlive/dev-cli"
     },
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "TJ Miller",
+            "email": "tj@tjmiller.me"
         }
     ],
     "require": {
