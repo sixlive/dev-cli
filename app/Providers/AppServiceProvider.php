@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\HandleconfiguredCommand;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 use TitasGailius\Terminal\Response;
@@ -51,33 +52,8 @@ class AppServiceProvider extends ServiceProvider
 
         foreach ($commands as $command => $tasks) {
             Artisan::command("{$command}", function () use ($tasks) {
-                /** @var \LaravelZero\Framework\Commands\Command $this */
-
-                $this->line($this->getApplication()->getName());
-                $options = $tasks['options'] ?? [];
-                if ($options) {
-                   unset($tasks['options']);
-                }
-
-                foreach ($tasks as $name => $task) {
-                    $this->task($name, function () use ($task) {
-                        /** @var \LaravelZero\Framework\Commands\Command $this */
-                        $terminal = Terminal::builder();
-
-                        /** @var Response */
-                        $response = $terminal->run($task);
-
-                        if ($this->getOutput()->isVerbose()) {
-
-                            $this->newLine(2);
-                            collect($response)->each(fn ($line) => $this->info($line));
-                        }
-
-                        return $response->ok();
-                    });
-                }
-            })
-                ->setDescription('Development command');
+                app(HandleconfiguredCommand::class)($this, $tasks);
+            })->setDescription('Development command');
         }
     }
 
