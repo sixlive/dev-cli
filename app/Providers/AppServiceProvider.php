@@ -20,32 +20,37 @@ class AppServiceProvider extends ServiceProvider
     {
         $config = [
             'default' => [
-                'start' => [
-                    'Valet' => 'valet start',
-                    'options' => [
-                        'flags' => ['verbose'],
+                'actions' => [
+                    'start' => [
+                        'Valet' => 'valet start',
+                        'options' => [
+                            'flags' => ['verbose'],
+                        ],
                     ],
-                ],
-                'stop' => [
-                    'Valet' => 'valet stop',
+                    'stop' => [
+                        'Valet' => 'valet stop',
+                    ],
                 ],
             ],
             'minimart' => [
-                'start' => [
-                    'Valet' => 'valet start',
-                    'options' => [
-                        'verbose'
+                'actions' => [
+                    'start' => [
+                        'Valet' => 'valet start',
+                        'options' => [
+                            'verbose'
+                        ],
                     ],
-                ],
-                'stop' => [
-                    'Valet' => 'valet stop',
+                    'stop' => [
+                        'Valet' => 'valet stop',
+                    ],
                 ],
             ],
         ];
+
         $commands = [];
 
         foreach ($config as $command => $actions){
-            foreach ($actions as $action => $tasks) {
+            foreach ($actions['actions'] as $action => $tasks) {
                 $commands["{$command}:{$action}"] = $tasks;
             }
         }
