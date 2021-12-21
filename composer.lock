@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f10df95280139a5023aefcf8919d663b",
+    "content-hash": "292f8e4b0c71757bd806a3c3bb4278db",
     "packages": [
         {
             "name": "brick/math",
@@ -3589,6 +3589,59 @@
                 }
             ],
             "time": "2021-12-01T15:04:08+00:00"
+        },
+        {
+            "name": "titasgailius/terminal",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TitasGailius/terminal.git",
+                "reference": "97e4ec277a64e4f6a0794715ebf1eebaedb2e71c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TitasGailius/terminal/zipball/97e4ec277a64e4f6a0794715ebf1eebaedb2e71c",
+                "reference": "97e4ec277a64e4f6a0794715ebf1eebaedb2e71c",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/process": "^4.4.2|^5.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "phpunit/phpunit": "^9.0",
+                "symfony/var-dumper": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TitasGailius\\Terminal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titas Gailius",
+                    "email": "titas.gailius@gmail.com"
+                }
+            ],
+            "description": "Terminal is an Elegent wrapper around Symfony's Process component.",
+            "keywords": [
+                "bash",
+                "exec",
+                "laravel",
+                "process",
+                "symfony",
+                "terminal"
+            ],
+            "support": {
+                "issues": "https://github.com/TitasGailius/terminal/issues",
+                "source": "https://github.com/TitasGailius/terminal"
+            },
+            "time": "2021-12-14T14:25:50+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "laravel-zero/framework": "^8.8"
+        "laravel-zero/framework": "^8.8",
+        "titasgailius/terminal": "^1.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.3",
