@@ -61,12 +61,14 @@ class InstallCommand extends Command
 
         $this->env('default', function () {
             $this->action('start', function () {
+                $this->description('Start the default dev env');
                 $this->task('Valet', 'valet start');
                 $this->task('DBngin', 'open /Applications/DBngin.app');
             });
 
 
             $this->action('stop', function () {
+                $this->description('Stop the default dev env');
                 $this->task('Valet', 'valet stop');
                 $this->task('DBngin', 'open /Applications/DBngin.app');
             });

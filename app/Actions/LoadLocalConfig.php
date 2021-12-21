@@ -24,7 +24,7 @@ class LoadLocalConfig
 
         foreach (glob($this->configPath) as $configPath) {
             if (is_readable($configPath)) {
-                Closure::bind(function ($configPath) {
+                Closure::bind(function (string $configPath) {
                     require_once $configPath;
                 }, $config)($configPath);
             }

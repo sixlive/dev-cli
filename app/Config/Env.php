@@ -2,6 +2,7 @@
 
 namespace App\Config;
 
+use App\Enums\ProtectedTasks;
 use Closure;
 
 class Env
@@ -22,7 +23,7 @@ class Env
     {
         $tasks->bindTo($this)();
         $this->actions[$title] = array_merge(...$this->tasks);
-        $this->tasks = [];
+        $this->reset();
     }
 
     public function task(string $title, string $command)
@@ -33,5 +34,17 @@ class Env
     public function actions()
     {
         return $this->actions;
+    }
+
+    public function description(string $description): void
+    {
+        array_push($this->tasks, [ProtectedTasks::Description => $description]);
+
+    }
+
+    private function reset()
+    {
+        $this->tasks = [];
+        $this->actionDescription = '';
     }
 }
