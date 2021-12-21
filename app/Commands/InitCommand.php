@@ -28,7 +28,7 @@ class InitCommand extends Command
     public function handle()
     {
         $configPath = sprintf(
-            '%s/.config/dev-cli/config.php',
+            '%s/.config/dev-cli/default.php',
             getenv("HOME")
         );
 
@@ -42,7 +42,7 @@ class InitCommand extends Command
     {
         if (!is_dir($configPath)) {
             mkdir($configPath, 0777, true);
-            copy(app_path('stubs/config.php'), $configPath.'/config.php');
+            copy(app_path('stubs/default.php'), $configPath.'/default.php');
         }
 
         return true;

@@ -13,7 +13,7 @@ class LoadLocalConfig
     public function __construct()
     {
         $this->configPath = sprintf(
-            '%s/.config/dev-cli/config.php',
+            '%s/.config/dev-cli/*.php',
             getenv("HOME")
         );
     }
@@ -22,10 +22,12 @@ class LoadLocalConfig
     {
         $config = new Config;
 
-        if (is_readable($this->configPath)) {
-            Closure::bind(function ($configPath) {
-                require_once $configPath;
-            }, $config)($this->configPath);
+        foreach (glob($this->configPath) as $configPath) {
+            if (is_readable($configPath)) {
+                Closure::bind(function ($configPath) {
+                    require_once $configPath;
+                }, $config)($configPath);
+            }
         }
 
         return $this->formatConfigForCommands($config);
