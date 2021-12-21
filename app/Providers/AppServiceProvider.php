@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Actions\HandleconfiguredCommand;
+use App\Enums\ProtectedTasks;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
-use TitasGailius\Terminal\Response;
-use TitasGailius\Terminal\Terminal;
 use Illuminate\Console\Application as App;
+use Illuminate\Support\Collection;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,46 +20,44 @@ class AppServiceProvider extends ServiceProvider
     {
         $config = [
             'default' => [
-                'actions' => [
-                    'start' => [
-                        'Valet' => 'valet start',
-                        'options' => [
-                            'flags' => ['verbose'],
-                        ],
-                    ],
-                    'stop' => [
-                        'Valet' => 'valet stop',
-                    ],
+                'start' => [
+                    'Valet' => 'valet start',
+                    (string) ProtectedTasks::Description() => 'Start default development env',
+                ],
+                'stop' => [
+                    'Valet' => 'valet stop',
                 ],
             ],
             'minimart' => [
-                'actions' => [
-                    'start' => [
-                        'Valet' => 'valet start',
-                        'options' => [
-                            'verbose'
-                        ],
-                    ],
-                    'stop' => [
-                        'Valet' => 'valet stop',
-                    ],
+                'start' => [
+                    'Valet' => 'valet start',
+                ],
+                'stop' => [
+                    'Valet' => 'valet stop',
                 ],
             ],
         ];
 
-        $commands = [];
+        $commands = collect();
 
         foreach ($config as $command => $actions){
-            foreach ($actions['actions'] as $action => $tasks) {
-                $commands["{$command}:{$action}"] = $tasks;
+            foreach ($actions as $action => $tasks) {
+                $commands["{$command}:{$action}"] = collect($tasks);
             }
         }
 
-        foreach ($commands as $command => $tasks) {
-            Artisan::command("{$command}", function () use ($tasks) {
-                app(HandleconfiguredCommand::class)($this, $tasks);
-            })->setDescription('Development command');
-        }
+        $commands->each(function (Collection $tasks, $commandName) {
+            $command = Artisan::command("{$commandName}", function () use ($tasks) {
+                app(HandleconfiguredCommand::class)(
+                    $this,
+                    (array) $tasks->except(ProtectedTasks::toArray()),
+                );
+            });
+
+            $command->setDescription(
+                $tasks->get((string) ProtectedTasks::Description(), '')
+            );
+        });
     }
 
     /**
