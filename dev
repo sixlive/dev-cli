@@ -15,6 +15,7 @@ use Minicli\Exception\CommandNotFoundException;
 use App\Services\TerminalOutput;
 use Minicli\Command\CommandCall;
 use TitasGailius\Terminal\Terminal;
+use TitasGailius\Terminal\Response;
 
 $app = new App([
     'theme' => '\Unicorn',
@@ -56,10 +57,17 @@ collect($localConfig)
                 $output->info(' Running Tasks ', true);
                 $output->newLine();
                 foreach ($actions[$call->subcommand] as $sub => $ex) {
-                    $success = $task($sub, fn () => (Terminal::run($ex))->ok());
-                    if (!$success) {
+                    /** @var Response */
+                    $success = $task($sub, fn () => (Terminal::run($ex)));
+
+                    if ($call->hasFlag('--verbose')) {
+                        collect($success)->each(fn ($line) => $output->out($line));
+                    }
+
+                    if (!$success->ok()) {
                         throw new Exception("$sub failed");
                     }
+
                 }
             }
         );
