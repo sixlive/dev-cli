@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'Dev-cli',
+    'name' => 'dev-cli',
 
     /*
     |--------------------------------------------------------------------------
@@ -52,8 +52,6 @@ return [
     | this array to grant expanded functionality to your applications.
     |
      */
-
-    'useDefaultProvider' => false,
 
     'providers' => [
         App\Providers\AppServiceProvider::class,

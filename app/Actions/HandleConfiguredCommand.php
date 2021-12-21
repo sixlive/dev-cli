@@ -5,7 +5,7 @@ namespace App\Actions;
 use Illuminate\Foundation\Console\ClosureCommand as Command;
 use TitasGailius\Terminal\Terminal;
 
-class HandleconfiguredCommand
+class HandleConfiguredCommand
 {
     protected Command $command;
 

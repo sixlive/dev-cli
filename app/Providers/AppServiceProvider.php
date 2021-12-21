@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Actions\HandleconfiguredCommand;
+use App\Actions\HandleConfiguredCommand;
 use App\Actions\LoadLocalConfig;
 use App\Enums\ProtectedTasks;
 use Illuminate\Support\Facades\Artisan;
@@ -19,28 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $config = app(LoadLocalConfig::class)();
-
-        $commands = collect();
-
-        foreach ($config as $command => $actions){
-            foreach ($actions as $action => $tasks) {
-                $commands["{$command}:{$action}"] = collect($tasks);
-            }
-        }
-
-        $commands->each(function (Collection $tasks, $commandName) {
-            $command = Artisan::command("{$commandName}", function () use ($tasks) {
-                app(HandleconfiguredCommand::class)(
-                    $this,
-                    (array) $tasks->except(ProtectedTasks::toArray()),
-                );
-            });
-
-            $command->setDescription(
-                $tasks->get((string) ProtectedTasks::Description(), '')
-            );
-        });
+        $this->registerCommands();
     }
 
     /**
@@ -64,5 +43,26 @@ class AppServiceProvider extends ServiceProvider
                EOF);
            }
        );
+    }
+
+    private function registerCommands(): void
+    {
+        $commands = app(LoadLocalConfig::class)()
+
+        $commands->each(function (Collection $tasks, $commandName) {
+            $command = Artisan::command("{$commandName}", function () use ($tasks) {
+                app(HandleConfiguredCommand::class)(
+                    $this,
+                    $tasks
+                        ->except(ProtectedTasks::toArray())
+                        ->toArray(),
+                );
+            });
+
+            $command->setDescription(
+                $tasks->get(ProtectedTasks::Description, '')
+            );
+        });
+
     }
 }

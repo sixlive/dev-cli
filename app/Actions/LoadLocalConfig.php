@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Collection;
 use App\Config\Config;
 use Closure;
 
@@ -17,7 +18,7 @@ class LoadLocalConfig
         );
     }
 
-    public function __invoke(): array
+    public function __invoke(): Collection
     {
         $config = new Config;
 
@@ -27,6 +28,19 @@ class LoadLocalConfig
             }, $config)($this->configPath);
         }
 
-        return $config->toArray();
+        return $this->formatConfigForCommands($config);
+    }
+
+    private function formatConfigForCommands(Config $config): Collection
+    {
+        $commands = collect();
+
+        foreach ($config->toArray() as $command => $actions){
+            foreach ($actions as $action => $tasks) {
+                $commands["{$command}:{$action}"] = collect($tasks);
+            }
+        }
+
+        return $commands;
     }
 }

@@ -19,7 +19,6 @@
         "php": "^7.3|^8.0",
         "laminas/laminas-text": "^2.8",
         "laravel-zero/framework": "^8.8",
-        "spatie/enum": "^3.11",
         "titasgailius/terminal": "^1.1"
     },
     "require-dev": {

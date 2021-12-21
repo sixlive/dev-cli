@@ -2,12 +2,14 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Enum;
-
-/**
- * @method static self Description()
- */
-class ProtectedTasks extends Enum
+class ProtectedTasks
 {
-    //
+    const Description = 'Description';
+
+    public static function toArray(): array
+    {
+        return [
+            self::Description,
+        ];
+    }
 }
