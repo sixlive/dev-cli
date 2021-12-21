@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
     private function registerCommands(): void
     {
-        $commands = app(LoadLocalConfig::class)()
+        $commands = app(LoadLocalConfig::class)();
 
         $commands->each(function (Collection $tasks, $commandName) {
             $command = Artisan::command("{$commandName}", function () use ($tasks) {
