@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\HandleconfiguredCommand;
+use App\Actions\LoadLocalConfig;
 use App\Enums\ProtectedTasks;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
@@ -18,25 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $config = [
-            'default' => [
-                'start' => [
-                    'Valet' => 'valet start',
-                    (string) ProtectedTasks::Description() => 'Start default development env',
-                ],
-                'stop' => [
-                    'Valet' => 'valet stop',
-                ],
-            ],
-            'minimart' => [
-                'start' => [
-                    'Valet' => 'valet start',
-                ],
-                'stop' => [
-                    'Valet' => 'valet stop',
-                ],
-            ],
-        ];
+        $config = app(LoadLocalConfig::class)();
 
         $commands = collect();
 
