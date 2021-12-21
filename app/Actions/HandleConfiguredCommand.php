@@ -19,11 +19,6 @@ class HandleConfiguredCommand
         // Logo
         $command->line($command->getApplication()->getName());
 
-        $options = $tasks['options'] ?? [];
-        if ($options) {
-           unset($tasks['options']);
-        }
-
         foreach ($tasks as $name => $task) {
             $command->task($name, function () use ($command, $task) {
                 $terminal = Terminal::builder();
