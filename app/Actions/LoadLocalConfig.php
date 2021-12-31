@@ -8,29 +8,45 @@ use Closure;
 
 class LoadLocalConfig
 {
-    protected string $configPath;
+    protected Collection $configPaths;
 
     public function __construct()
     {
-        $this->configPath = sprintf(
+        $this->configPaths = collect();
+
+        $this->configPaths->push(sprintf(
             '%s/.config/dev-cli/*.php',
             getenv("HOME")
-        );
+        ));
+
+        if ($this->hasConfigInPath()) {
+            $this->configPaths->push(sprintf('%s/.dev-cli.php', getenv('PWD')));
+        }
+    }
+
+    private function hasConfigInPath(): bool
+    {
+        return is_file(sprintf('%s/.dev-cli.php', getenv('PWD')));
     }
 
     public function __invoke(): Collection
     {
         $config = new Config;
 
-        foreach (glob($this->configPath) as $configPath) {
+        $this->configPaths->each(fn ($path) => $this->loadConfigForPath($config, $path));
+
+        return $this->formatConfigForCommands($config);
+    }
+
+    private function loadConfigForPath(Config $config, string $path): void
+    {
+        foreach (glob($path) as $configPath) {
             if (is_readable($configPath)) {
                 Closure::bind(function (string $configPath) {
                     require_once $configPath;
                 }, $config)($configPath);
             }
         }
-
-        return $this->formatConfigForCommands($config);
     }
 
     private function formatConfigForCommands(Config $config): Collection
