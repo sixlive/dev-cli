@@ -11,7 +11,9 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'install {--f|force}';
+    protected $signature = 'install
+        {--f|force : Force the installation}
+        {--l|local : Install a configration at your current path}';
 
     /**
      * The description of the command.
@@ -27,10 +29,7 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $configPath = sprintf(
-            '%s/.config/dev-cli/default.php',
-            getenv("HOME")
-        );
+        $configPath = $this->getConfigPath();
 
         $configDirectory = pathinfo($configPath, PATHINFO_DIRNAME);
 
@@ -51,10 +50,31 @@ class InstallCommand extends Command
                 fn () => file_put_contents($configPath, $this->defaultConfig())
             );
         }
+    }
 
+    private function getConfigPath(): string
+    {
+        if ($this->option('local')) {
+            return sprintf(
+                '%s/.dev-cli.php',
+                getenv('PWD')
+            );
+        }
+
+        return sprintf(
+            '%s/.config/dev-cli/default.php',
+            getenv('HOME')
+        );
     }
 
     private function defaultConfig(): string
+    {
+        return $this->option('local')
+            ? $this->localConfig()
+            : $this->globalConfig();
+    }
+
+    private function globalConfig(): string
     {
         return <<< 'EOT'
         <?php
@@ -75,5 +95,30 @@ class InstallCommand extends Command
         });
 
         EOT;
+
+    }
+
+    private function localConfig(): string
+    {
+        return <<< 'EOT'
+        <?php
+
+        $this->env(basename(getenv('PWD')), function () {
+            $this->action('start', function () {
+                $this->description('Start the default dev env');
+                $this->task('Valet', 'valet start');
+                $this->task('Open DBngin', 'open /Applications/DBngin.app');
+            });
+
+
+            $this->action('stop', function () {
+                $this->description('Stop the default dev env');
+                $this->task('Valet', 'valet stop');
+                $this->task('Open DBngin', 'open /Applications/DBngin.app');
+            });
+        });
+
+        EOT;
+
     }
 }
