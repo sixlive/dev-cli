@@ -69,7 +69,8 @@ class AppServiceProvider extends ServiceProvider
                 );
             });
 
-            $command->addOption('except', 'e', InputOption::VALUE_OPTIONAL, 'Tasks to exclude. Comma seperated');
+            $command->addOption('except', 'e', InputOption::VALUE_OPTIONAL, 'Tasks to exclude, comma seperated');
+            $command->addOption('list', 'l', InputOption::VALUE_NONE, 'List tasks.');
 
             $command->setDescription(
                 $tasks->get(ProtectedTasks::Description, '')

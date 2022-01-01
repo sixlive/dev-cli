@@ -19,8 +19,23 @@ class HandleConfiguredCommand
         // Logo
         $command->line($command->getApplication()->getName());
 
+        if ($command->option('list')) {
+            $command->info($command->getName().':');
+            collect($tasks)
+                ->keys()
+                ->each(fn ($task) => $command->line(' - '.$task));
+
+            exit;
+        }
+
+        $this->runTasks($command, $tasks);
+    }
+
+    private function runTasks(Command $command, array $tasks): void
+    {
         foreach ($tasks as $name => $task) {
             $command->task($name, function () use ($command, $task) {
+
                 $terminal = Terminal::builder();
 
                 /** @var Response */
